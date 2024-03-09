@@ -1,0 +1,238 @@
+openapi: 3.0.2
+info:
+  title: api--order
+  version: 1.0.0
+  description: Api de pedidos de produto
+paths:
+  /api/order/save:
+    summary: Salva o Pedido
+    description: Salva O Pedido
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      tags:
+        - Order
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+          description: SUCESSO
+      operationId: save
+  '/api/order/list/{idCustomer}':
+    summary: Retorna Lista de Pedidos do Cliente
+    description: Retorna Lista de Pedidos do Cliente
+    get:
+      tags:
+        - Order
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+          description: SUCESSO
+      operationId: listByCustomer
+    parameters:
+      - name: idCustomer
+        description: Identificador do Cliente
+        schema:
+          type: number
+        in: path
+        required: true
+  '/api/order/{id}':
+    summary: Obtem o Pedido pelo Id
+    description: Obtem o Pedido pelo Id
+    get:
+      tags:
+        - Order
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+          description: SUCESSO
+      operationId: findById
+      summary: Obtem o Pedido pelo Id
+      description: Obtem o Pedido pelo Id
+    parameters:
+      - name: id
+        description: Identificador do elemento
+        schema:
+          type: number
+        in: path
+        required: true
+  '/api/order/{id}/status':
+    summary: Obtem o Pedido pelo Id
+    description: Atualiza o Status do Pedido
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatusRequest'
+      tags:
+        - Order
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+          description: SUCESSO
+      operationId: updateStatus
+      summary: Obtem o Pedido pelo Id
+      description: Obtem o Pedido pelo Id
+    parameters:
+      - name: id
+        description: Identificador do elemento
+        schema:
+          type: number
+        in: path
+        required: true
+components:
+  schemas:
+    OrderRequest:
+      title: Root Type for OrderRequest
+      description: ''
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        status:
+          format: int32
+          type: integer
+        idCustomer:
+          format: int32
+          type: integer
+        createdAt:
+          format: date-time
+          type: string
+        paymentType:
+          type: string
+        paymentParams:
+          $ref: '#/components/schemas/PaymentParamsRequest'
+          properties:
+            keyCode:
+              type: string
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRequest'
+      example:
+        id: 1
+        status: 1
+        idCustomer: 1
+        createdAt: '2020-08-17T10:11:16.908732'
+        paymentType: PIX_PAYMENT
+        paymentParams:
+          keyCode: '1231232132131212312312312312312123'
+        orderItems:
+          - idProduct: 1
+          - idProduct: 3
+    OrderItemRequest:
+      title: Root Type for OrderItemRequest
+      description: ''
+      type: object
+      properties:
+        idProduct:
+          format: int32
+          type: integer
+        nameProduct:
+          description: ''
+          type: string
+        price:
+          format: double
+          description: ''
+          type: number
+      example:
+        idProduct: 1
+        nameProduct: NOME PRODUTO
+        price: 20
+    PaymentParamsRequest:
+      description: ''
+      type: object
+      additionalProperties:
+        type: object
+    StatusResponse:
+      title: Root Type for StatusResponse
+      description: ''
+      type: object
+      properties:
+        code:
+          format: int32
+          type: integer
+        description:
+          type: string
+      example:
+        code: 0
+        description: SUCESSO
+    OrderItemResponse:
+      title: Root Type for OrderItemRequest
+      description: ''
+      type: object
+      properties:
+        idProduct:
+          format: int32
+          type: integer
+        nameProduct:
+          description: ''
+          type: string
+        price:
+          format: double
+          description: ''
+          type: number
+      example:
+        idProduct: 1
+        nameProduct: NOME PRODUTO
+        price: 20
+    OrderResponse:
+      title: Root Type for OrderRequest
+      description: ''
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        status:
+          format: int32
+          type: integer
+        idCustomer:
+          format: int32
+          type: integer
+        createdAt:
+          format: date-time
+          type: string
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemResponse'
+      example:
+        id: 1
+        status: 1
+        idCustomer: 1
+        createdAt: '2020-08-17T10:11:16.908732'
+        paymentType: PIX_PAYMENT
+        paymentParams:
+          keyCode: '1231232132131212312312312312312123'
+        orderItems:
+          - idProduct: 1
+          - idProduct: 3
+    OrderStatusRequest:
+      title: Root Type for OrderStatusRequest
+      description: ''
+      type: object
+      properties:
+        status:
+          format: int32
+          type: integer
+      example:
+        status: 1
