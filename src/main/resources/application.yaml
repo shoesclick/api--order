@@ -27,14 +27,6 @@ spring:
       multiplier: 1.5
       compatibility-verifier:
         enabled=false:
-
-info:
-  app:
-    name: "@project.name@"
-    version: "@project.version@"
-    description: "@project.description@ "
-    base-package: "com.shoesclick.api.order"
-
   jpa:
     properties:
       hibernate:
@@ -65,6 +57,13 @@ rabbitmq:
     queue: mq_payment
     routingKey: payment_routingkey
 
+info:
+  app:
+    name: "@project.name@"
+    version: "@project.version@"
+    description: "@project.description@ "
+    base-package: "com.shoesclick.api.order"
+
 feign:
   client:
     config:
@@ -72,11 +71,6 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: basic
-
-backend:
-  services:
-    customerUrl: http://localhost:8081/
-    productUrl: http://localhost:8082/
 
 eureka:
   client:
