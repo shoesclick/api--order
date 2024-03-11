@@ -20,12 +20,12 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue notificationQueue() {
-        return new Queue(mqProperties.getNotification().getQueue());
+        return new Queue(mqProperties.notification().queue());
     }
 
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange(mqProperties.getExchange());
+        return new TopicExchange(mqProperties.exchange());
     }
 
     @Bean
@@ -33,12 +33,12 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(notificationQueue())
                 .to(exchange())
-                .with(mqProperties.getNotification().getRoutingKey());
+                .with(mqProperties.notification().routingKey());
     }
 
     @Bean
     public Queue paymentQueue() {
-        return new Queue(mqProperties.getPayment().getQueue());
+        return new Queue(mqProperties.payment().queue());
     }
 
     @Bean
@@ -46,6 +46,6 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(paymentQueue())
                 .to(exchange())
-                .with(mqProperties.getPayment().getRoutingKey());
+                .with(mqProperties.payment().routingKey());
     }
 }
