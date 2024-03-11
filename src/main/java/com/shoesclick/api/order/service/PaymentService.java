@@ -29,7 +29,7 @@ public class PaymentService {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
             String json = mapper.writeValueAsString(getPayment(order,paymentDomain));
-            rabbitTemplate.convertAndSend(mqProperties.getExchange(), mqProperties.getPayment().getRoutingKey(), json);
+            rabbitTemplate.convertAndSend(mqProperties.exchange(), mqProperties.payment().routingKey(), json);
         } catch (JsonProcessingException e) {
             throw new BusinessException("ERRO NO PROCESSAMENTO DA FILA MQ");
         }

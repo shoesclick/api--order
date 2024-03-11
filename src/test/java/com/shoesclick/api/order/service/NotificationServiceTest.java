@@ -35,11 +35,9 @@ class NotificationServiceTest {
 
     @BeforeEach
     public void setUp() {
-        var mqNotificationProperties = new MQNotificationProperties();
-        mqNotificationProperties.setQueue("FILA");
-        mqNotificationProperties.setRoutingKey("ROUTING");
-        when(mqProperties.getExchange()).thenReturn("EXCHANGE");
-        when(mqProperties.getNotification()).thenReturn(mqNotificationProperties);
+        var mqNotificationProperties = new MQNotificationProperties("ROUTING","FILA");
+        when(mqProperties.exchange()).thenReturn("EXCHANGE");
+        when(mqProperties.notification()).thenReturn(mqNotificationProperties);
     }
 
     @Test

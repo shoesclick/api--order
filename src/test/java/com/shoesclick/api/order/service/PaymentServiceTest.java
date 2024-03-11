@@ -34,11 +34,9 @@ class PaymentServiceTest {
 
     @BeforeEach
     public void setUp() {
-        var mqPaymentProperties = new MQPaymentProperties();
-        mqPaymentProperties.setQueue("FILA");
-        mqPaymentProperties.setRoutingKey("ROUTING");
-        when(mqProperties.getExchange()).thenReturn("EXCHANGE");
-        when(mqProperties.getPayment()).thenReturn(mqPaymentProperties);
+        var mqPaymentProperties = new MQPaymentProperties("ROUTING","FILA");
+        when(mqProperties.exchange()).thenReturn("EXCHANGE");
+        when(mqProperties.payment()).thenReturn(mqPaymentProperties);
     }
 
     @Test

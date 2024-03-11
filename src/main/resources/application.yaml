@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /order
+    context-path: /api--order
   port: 5000
 spring:
   application:
