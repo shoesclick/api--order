@@ -1,0 +1,24 @@
+@namespace("com.shoesclick.payment.avro")
+protocol PaymentAvroIDL {
+
+	record PaymentAvro{
+		OrderAvro order;
+		string paymentType;
+		map<string> paymentParams;
+	}
+
+	record OrderAvro {
+		long id;
+		int  status = 1;
+		long idCustomer;
+		date  createdAt;
+		array<OrderItemAvro> orderItems;
+	}
+
+	record OrderItemAvro{
+		long id;
+		long idProduct;
+		string nameProduct;
+		double price;
+	}
+}

@@ -1,14 +1,10 @@
 package com.shoesclick.api.order.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.shoesclick.api.order.config.properties.MqProperties;
+import com.shoesclick.api.order.config.properties.KafkaProperties;
 import com.shoesclick.api.order.entity.Notification;
-import com.shoesclick.api.order.entity.Order;
-import com.shoesclick.api.order.enums.TypeTemplate;
-import com.shoesclick.api.order.exception.BusinessException;
-import org.springframework.amqp.core.AmqpTemplate;
+import com.shoesclick.api.order.mapper.NotificationMapper;
+import com.shoesclick.notification.avro.NotificationAvro;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -17,22 +13,19 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
 
-    private final MqProperties mqProperties;
-    private final AmqpTemplate rabbitTemplate;
+    private final KafkaTemplate<String, NotificationAvro> kafkaTemplate;
 
-    public NotificationService(MqProperties mqProperties, AmqpTemplate rabbitTemplate) {
-        this.mqProperties = mqProperties;
-        this.rabbitTemplate = rabbitTemplate;
+    private final NotificationMapper notificationMapper;
+
+    private final KafkaProperties kafkaProperties;
+
+    public NotificationService(KafkaTemplate<String, NotificationAvro> kafkaTemplate, NotificationMapper notificationMapper, KafkaProperties kafkaProperties) {
+        this.kafkaTemplate = kafkaTemplate;
+        this.notificationMapper = notificationMapper;
+        this.kafkaProperties = kafkaProperties;
     }
 
     public void sendNotification(Notification notification) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            String json = mapper.writeValueAsString(notification);
-            rabbitTemplate.convertAndSend(mqProperties.exchange(), mqProperties.notification().routingKey(), json);
-        } catch (JsonProcessingException e) {
-            throw new BusinessException("ERRO NO PROCESSAMENTO DA FILA MQ");
-        }
+        kafkaTemplate.send(kafkaProperties.notification().topic(), notificationMapper.map(notification) );
     }
 }
