@@ -70,7 +70,7 @@ management:
             include: diskSpace
 
 opentracing:
-  service-name: bff-site-shoes-app
+  service-name: api--order
   jaeger:
     http-sender:
       url: ${JAEGER_HOST:http://jaeger-collector.istio-system.svc.cluster.local:14268/api/traces

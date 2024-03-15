@@ -9,7 +9,7 @@ protocol PaymentAvroIDL {
 
 	record OrderAvro {
 		long id;
-		int  status = 1;
+		int  status;
 		long idCustomer;
 		date  createdAt;
 		array<OrderItemAvro> orderItems;

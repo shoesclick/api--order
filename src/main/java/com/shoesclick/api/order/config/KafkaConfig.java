@@ -1,11 +1,12 @@
 package com.shoesclick.api.order.config;
 
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
+
 import com.shoesclick.api.order.config.properties.KafkaProperties;
 import com.shoesclick.notification.avro.NotificationAvro;
 import com.shoesclick.payment.avro.PaymentAvro;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.*;
@@ -22,7 +23,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, NotificationAvro>producerNotificationFactory () {
+    public ProducerFactory<String, NotificationAvro> producerNotificationFactory () {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.bootstrapServers());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -32,7 +33,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, PaymentAvro>producerPaymentFactory () {
+    public ProducerFactory<String, PaymentAvro> producerPaymentFactory () {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.bootstrapServers());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);

@@ -3,9 +3,7 @@ protocol NotificationAvroIDL {
 
 	record NotificationAvro {
 		long idOrder;
-		int status;
 		long idCustomer;
-		local_timestamp_ms  createdAt;
 		TemplateEmailAvro typeTemplate;
 
 	}
