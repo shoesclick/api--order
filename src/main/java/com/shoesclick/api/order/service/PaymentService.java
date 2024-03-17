@@ -27,7 +27,7 @@ public class PaymentService {
 
 
     public void sendPayment(Order order, PaymentDomain paymentDomain) {
-        kafkaTemplate.send(kafkaProperties.payment().topic(), paymentMapper.map(getPayment(order,paymentDomain)) );
+        kafkaTemplate.send(kafkaProperties.payment().topic(), String.valueOf(order.getId()) ,  paymentMapper.map(getPayment(order,paymentDomain)) );
     }
 
     private Payment getPayment(Order order, PaymentDomain paymentDomain) {

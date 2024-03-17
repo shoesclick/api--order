@@ -26,6 +26,6 @@ public class NotificationService {
     }
 
     public void sendNotification(Notification notification) {
-        kafkaTemplate.send(kafkaProperties.notification().topic(), notificationMapper.map(notification) );
+        kafkaTemplate.send(kafkaProperties.notification().topic(), String.valueOf(notification.getIdOrder()) , notificationMapper.map(notification) );
     }
 }

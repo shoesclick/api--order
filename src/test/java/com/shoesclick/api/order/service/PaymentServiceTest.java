@@ -60,6 +60,6 @@ class PaymentServiceTest {
                 new PaymentDomain().setPaymentType("PIX_PAYMENT").setPaymentParams(Map.of()));
 
 
-        verify(kafkaTemplate, times(1)).send(anyString(), any(PaymentAvro.class));
+        verify(kafkaTemplate, times(1)).send(anyString(), anyString(), any(PaymentAvro.class));
     }
 }

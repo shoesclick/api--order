@@ -48,6 +48,6 @@ class NotificationServiceTest {
     void shouldSendNotificationSuccess() throws IllegalAccessException {
         when(notificationMapper.map(any(Notification.class))).thenReturn(new NotificationAvro());
         notificationService.sendNotification(new Notification().setIdOrder(1L).setIdCustomer(1L).setTypeTemplate(TypeTemplate.CREATE_ORDER));
-        verify(kafkaTemplate, times(1)).send(anyString(), any(NotificationAvro.class));
+        verify(kafkaTemplate, times(1)).send(anyString(), anyString(), any(NotificationAvro.class));
     }
 }
