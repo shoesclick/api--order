@@ -1,38 +1,33 @@
 package com.shoesclick.api.order.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.shoesclick.api.order.config.properties.MqProperties;
+import com.shoesclick.api.order.config.properties.KafkaProperties;
 import com.shoesclick.api.order.domain.PaymentDomain;
 import com.shoesclick.api.order.entity.Order;
 import com.shoesclick.api.order.entity.Payment;
-import com.shoesclick.api.order.exception.BusinessException;
-import org.springframework.amqp.core.AmqpTemplate;
+import com.shoesclick.api.order.mapper.PaymentMapper;
+import com.shoesclick.payment.avro.PaymentAvro;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
 
-    private final MqProperties mqProperties;
 
-    private final AmqpTemplate rabbitTemplate;
+    private final KafkaTemplate<String, PaymentAvro> kafkaTemplate;
 
-    public PaymentService(MqProperties mqProperties, AmqpTemplate rabbitTemplate) {
-        this.mqProperties = mqProperties;
-        this.rabbitTemplate = rabbitTemplate;
+    private final PaymentMapper paymentMapper;
+
+    private final KafkaProperties kafkaProperties;
+
+    public PaymentService(KafkaTemplate<String, PaymentAvro> kafkaTemplate, PaymentMapper paymentMapper, KafkaProperties kafkaProperties) {
+        this.kafkaTemplate = kafkaTemplate;
+        this.paymentMapper = paymentMapper;
+        this.kafkaProperties = kafkaProperties;
     }
 
-    public void sendPayment(Order order, PaymentDomain paymentDomain) {
-        try {
 
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            String json = mapper.writeValueAsString(getPayment(order,paymentDomain));
-            rabbitTemplate.convertAndSend(mqProperties.exchange(), mqProperties.payment().routingKey(), json);
-        } catch (JsonProcessingException e) {
-            throw new BusinessException("ERRO NO PROCESSAMENTO DA FILA MQ");
-        }
+    public void sendPayment(Order order, PaymentDomain paymentDomain) {
+        kafkaTemplate.send(kafkaProperties.payment().topic(), String.valueOf(order.getId()) ,  paymentMapper.map(getPayment(order,paymentDomain)) );
     }
 
     private Payment getPayment(Order order, PaymentDomain paymentDomain) {

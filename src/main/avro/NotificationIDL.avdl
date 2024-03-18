@@ -1,0 +1,19 @@
+@namespace("com.shoesclick.notification.avro")
+protocol NotificationAvroIDL {
+
+	record NotificationAvro {
+		long idOrder;
+		long idCustomer;
+		TemplateEmailAvro typeTemplate;
+
+	}
+
+	enum TemplateEmailAvro {
+		CREATE_ORDER,
+		PAYMENT_APPROVED,
+		PAYMENT_NOT_AUTHORIZED,
+		PIX_GENERATED,
+		TICKET_GENERATED
+	} = CREATE_ORDER;
+
+}
