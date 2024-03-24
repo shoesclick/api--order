@@ -5,11 +5,19 @@ import com.shoesclick.api.order.domain.PaymentDomain;
 import com.shoesclick.api.order.entity.Order;
 import com.shoesclick.api.order.entity.Payment;
 import com.shoesclick.api.order.mapper.PaymentMapper;
+import com.shoesclick.notification.avro.NotificationAvro;
 import com.shoesclick.payment.avro.PaymentAvro;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
+@Component
 public class PaymentService {
 
 
@@ -27,7 +35,8 @@ public class PaymentService {
 
 
     public void sendPayment(Order order, PaymentDomain paymentDomain) {
-        kafkaTemplate.send(kafkaProperties.payment().topic(), String.valueOf(order.getId()) ,  paymentMapper.map(getPayment(order,paymentDomain)) );
+        var record = new ProducerRecord<>(kafkaProperties.payment().topic(), String.valueOf(order.getId()), paymentMapper.map(getPayment(order, paymentDomain)));
+        kafkaTemplate.send(record);
     }
 
     private Payment getPayment(Order order, PaymentDomain paymentDomain) {
@@ -36,4 +45,5 @@ public class PaymentService {
                 .setPaymentType(paymentDomain.getPaymentType())
                 .setPaymentParams(paymentDomain.getPaymentParams());
     }
+
 }

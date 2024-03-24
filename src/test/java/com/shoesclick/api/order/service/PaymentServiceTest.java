@@ -7,12 +7,18 @@ import com.shoesclick.api.order.entity.Order;
 import com.shoesclick.api.order.entity.Payment;
 import com.shoesclick.api.order.mapper.PaymentMapper;
 import com.shoesclick.payment.avro.PaymentAvro;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -35,6 +41,15 @@ class PaymentServiceTest {
     @Mock
     private KafkaProperties kafkaProperties;
 
+    @Mock
+    private SecurityContext securityContext;
+
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private Jwt jwt;
+
     @InjectMocks
     private PaymentService paymentService;
 
@@ -49,17 +64,28 @@ class PaymentServiceTest {
     @Test
     void shouldSendNotificationSuccess() throws IllegalAccessException {
 
-        when(paymentMapper.map(anyMap())).thenReturn(new HashMap<>());
-        when(paymentMapper.map(any(Payment.class))).thenReturn(new PaymentAvro());
+        try (MockedStatic mocked = mockStatic(SecurityContextHolder.class)) {
 
-        paymentService.sendPayment(new Order()
-                .setId(1L)
-                .setCreatedAt(LocalDateTime.now())
-                .setStatus(1)
-                .setIdCustomer(1L),
-                new PaymentDomain().setPaymentType("PIX_PAYMENT").setPaymentParams(Map.of()));
+            mocked.when(()-> SecurityContextHolder.getContext()).thenReturn(securityContext);
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getPrincipal()).thenReturn(jwt);
+            when(jwt.getTokenValue()).thenReturn("TOKEN");
 
 
-        verify(kafkaTemplate, times(1)).send(anyString(), anyString(), any(PaymentAvro.class));
+            when(paymentMapper.map(anyMap())).thenReturn(new HashMap<>());
+            when(paymentMapper.map(any(Payment.class))).thenReturn(new PaymentAvro());
+
+            paymentService.sendPayment(new Order()
+                            .setId(1L)
+                            .setCreatedAt(LocalDateTime.now())
+                            .setStatus(1)
+                            .setIdCustomer(1L),
+                    new PaymentDomain().setPaymentType("PIX_PAYMENT").setPaymentParams(Map.of()));
+
+
+            verify(kafkaTemplate, times(1)).send(any(ProducerRecord.class));
+
+
+        }
     }
 }

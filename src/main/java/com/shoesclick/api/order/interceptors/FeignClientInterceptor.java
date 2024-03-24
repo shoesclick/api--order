@@ -1,4 +1,4 @@
-package com.shoesclick.api.order.config;
+package com.shoesclick.api.order.interceptors;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
