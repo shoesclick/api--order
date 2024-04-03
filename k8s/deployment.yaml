@@ -15,12 +15,12 @@ spec:
     spec:
         containers:
           - name: api--order-container
-            image: $awsaccountid.dkr.ecr.$awseksregion.amazonaws.com/$awsecrrepository:api--order-$githash
+            image: $dck-accountid/$dck-repository:api--order-$githash
             env:
               - name: SPRING_PROFILES_ACTIVE
                 value: "dev"
               - name: CONFIG_SERVER
-                value: "http://svc-swapiconfigserver.corporativo.svc.cluster.local/config/"
+                value: "http://svc-swapiconfigserver.shoes-eks.svc.cluster.local/config/"
             ports:
               - containerPort: 5000
               - containerPort: 9090
