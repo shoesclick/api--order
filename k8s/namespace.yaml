@@ -2,5 +2,3 @@ apiVersion: v1
 kind: Namespace
 metadata:
     name: shoes-eks
-    labels:
-        istio-injection: enabled
