@@ -25,6 +25,8 @@ spec:
                 value: "http://svc-login.ns-login.svc.cluster.local:7080"
               - name: MYSQL_HOST
                 value: "mysql.ns-infra.svc.cluster.local"
+              - name: DISCOVERY_HOST
+                value: "http://svc-server--discovery-stack.shoes-eks.svc.cluster.local:8762"
             ports:
               - containerPort: 5000
               - containerPort: 9090
