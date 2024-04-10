@@ -27,6 +27,10 @@ spec:
                 value: "mysql.ns-infra.svc.cluster.local"
               - name: DISCOVERY_HOST
                 value: "http://svc-server--discovery-stack.shoes-eks.svc.cluster.local:8762"
+              - name: KAFKA_HOST
+                value: "kafka-broker.ns-infra.svc.cluster.local"
+              - name: SCHEMA_REGISTRY_HOST
+                value: "schema-registry.ns-infra.svc.cluster.local"
             ports:
               - containerPort: 5000
               - containerPort: 9090
