@@ -19,22 +19,6 @@ spec:
             env:
               - name: SPRING_PROFILES_ACTIVE
                 value: "dev"
-              - name: CONFIG_SERVER
-                value: "http://svc-server--config-service.shoes-eks.svc.cluster.local:8888/config/"
-              - name: LOGIN_URL
-                value: "http://svc-login.ns-login.svc.cluster.local:7080"
-              - name: MYSQL_HOST
-                value: "mysql.ns-infra.svc.cluster.local"
-              - name: DISCOVERY_HOST
-                value: "http://svc-server--discovery-stack.shoes-eks.svc.cluster.local:8762"
-              - name: KAFKA_HOST
-                value: "kafka-broker.ns-infra.svc.cluster.local"
-              - name: SCHEMA_REGISTRY_HOST
-                value: "schema-registry.ns-infra.svc.cluster.local"
-              - name: API_CUSTOMER_URL
-                value: "http://api--customer.shoes-eks.svc.cluster.local:5000"
-              - name: API_PRODUCT_URL
-                value: "http://api--product.shoes-eks.svc.cluster.local:5000"
             ports:
               - containerPort: 5000
               - containerPort: 9090
