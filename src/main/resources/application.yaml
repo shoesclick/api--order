@@ -13,7 +13,7 @@ spring:
   main:
     banner-mode: 'OFF'
   config:
-    import: "configserver:${CONFIG_SERVER:http://localhost:8888/config/}"
+    import: "configserver:http://config.shoesclick.local:8888/config/"
   cloud:
     allow-override: true
     config:
@@ -46,7 +46,7 @@ feign:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${DISCOVERY_HOST:http://localhost:8762}/eureka/
+      defaultZone: http://eureka.shoesclick.local:8762/eureka/
   instance:
     prefer-ip-address: 'true'
 
