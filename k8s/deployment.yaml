@@ -21,11 +21,11 @@ spec:
                 value: "dev"
             ports:
               - containerPort: 5000
-              - containerPort: 9090
+              - containerPort: 9190
             livenessProbe:
               httpGet:
                 path: /actuator/health
-                port: 9090
+                port: 9190
               initialDelaySeconds: 120
               periodSeconds: 60
               timeoutSeconds: 10
@@ -34,7 +34,7 @@ spec:
             readinessProbe:
               httpGet:
                 path: /actuator/health
-                port: 9090
+                port: 9190
               initialDelaySeconds: 120
               periodSeconds: 10
               timeoutSeconds: 10
