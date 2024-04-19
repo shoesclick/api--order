@@ -66,4 +66,4 @@ opentracing:
   service-name: api--order
   jaeger:
     http-sender:
-      url: ${JAEGER_HOST:http://jaeger-collector.istio-system.svc.cluster.local:14268/api/traces
+      url: ${JAEGER_HOST:http://jaeger-collector.monitoracao.svc.cluster.local:14268/api/traces
