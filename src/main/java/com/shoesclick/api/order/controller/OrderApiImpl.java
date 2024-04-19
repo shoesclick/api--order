@@ -1,5 +1,6 @@
 package com.shoesclick.api.order.controller;
 
+import com.shoesclick.api.order.config.OrderMetrics;
 import com.shoesclick.api.order.mapper.OrderMapper;
 import com.shoesclick.api.order.openapi.controller.OrderApi;
 import com.shoesclick.api.order.openapi.model.domain.OrderRequest;
@@ -19,9 +20,12 @@ public class OrderApiImpl implements OrderApi {
 
     private final OrderMapper orderMapper;
 
-    public OrderApiImpl(OrderService orderService, OrderMapper orderMapper) {
+    private final OrderMetrics orderMetrics;
+
+    public OrderApiImpl(OrderService orderService, OrderMapper orderMapper, OrderMetrics orderMetrics) {
         this.orderService = orderService;
         this.orderMapper = orderMapper;
+        this.orderMetrics = orderMetrics;
     }
 
     @Override
@@ -36,7 +40,9 @@ public class OrderApiImpl implements OrderApi {
 
     @Override
     public ResponseEntity<StatusResponse> save(OrderRequest orderRequest) {
-        return ResponseEntity.status(201).body(orderMapper.map(orderService.save(orderMapper.map(orderRequest),orderMapper.mapPayment(orderRequest.getPaymentType(),orderRequest.getPaymentParams()))));
+        var response = ResponseEntity.status(201).body(orderMapper.map(orderService.save(orderMapper.map(orderRequest),orderMapper.mapPayment(orderRequest.getPaymentType(),orderRequest.getPaymentParams()))));
+        orderMetrics.incrementOrderSuccessCount();
+        return response;
     }
 
     @Override

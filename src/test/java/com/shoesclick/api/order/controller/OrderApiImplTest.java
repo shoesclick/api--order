@@ -1,6 +1,7 @@
 package com.shoesclick.api.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shoesclick.api.order.config.OrderMetrics;
 import com.shoesclick.api.order.domain.PaymentDomain;
 import com.shoesclick.api.order.entity.Order;
 import com.shoesclick.api.order.entity.Status;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 class OrderApiImplTest {
@@ -38,6 +39,9 @@ class OrderApiImplTest {
 
     @Spy
     private OrderMapper orderMapper;
+
+    @Mock
+    private OrderMetrics orderMetrics;
 
     @InjectMocks
     private OrderApiImpl controller;
@@ -62,6 +66,8 @@ class OrderApiImplTest {
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .isCreated());
+
+        verify(orderMetrics, times(1)).incrementOrderSuccessCount();
     }
 
     @Test
@@ -74,6 +80,7 @@ class OrderApiImplTest {
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .isOk());
+        verify(orderMetrics, times(0)).incrementOrderSuccessCount();
     }
 
     @Test
@@ -86,6 +93,8 @@ class OrderApiImplTest {
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .isNotFound());
+
+        verify(orderMetrics, times(0)).incrementOrderSuccessCount();
     }
 
 
@@ -99,6 +108,7 @@ class OrderApiImplTest {
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .isOk());
+        verify(orderMetrics, times(0)).incrementOrderSuccessCount();
     }
 
 
@@ -112,6 +122,8 @@ class OrderApiImplTest {
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .isNoContent());
+
+        verify(orderMetrics, times(0)).incrementOrderSuccessCount();
     }
 
     @Test
@@ -126,6 +138,8 @@ class OrderApiImplTest {
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .isOk());
+
+        verify(orderMetrics, times(0)).incrementOrderSuccessCount();
     }
 
     private OrderStatusRequest getOrderStatusRequest() {
