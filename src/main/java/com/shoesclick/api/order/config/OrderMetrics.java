@@ -23,7 +23,7 @@ public class OrderMetrics {
     }
 
     public void incrementOrderSuccessCount() {
-        orderErrors.increment();
+        orderProcess.increment();
     }
 
     public void incrementOrderErrorCount() {
