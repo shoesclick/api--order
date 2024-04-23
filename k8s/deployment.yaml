@@ -18,7 +18,7 @@ spec:
             image: $dck-accountid/$dck-repository:api--order-$githash
             env:
               - name: SPRING_PROFILES_ACTIVE
-                value: "dev"
+                value: "dev,jsonlog"
             ports:
               - containerPort: 5000
               - containerPort: 9190
@@ -38,3 +38,10 @@ spec:
               initialDelaySeconds: 120
               periodSeconds: 10
               timeoutSeconds: 10
+            resources:
+              limits:
+                memory: "600Mi"
+                cpu : "400Mi"
+              requests:
+                memory: "400Mi"
+                cpu: "270Mi"

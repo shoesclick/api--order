@@ -1,25 +1,26 @@
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <timestamp>
-                <timeZone>EST</timeZone>
-                <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSS</timestampPattern>
-            </timestamp>
-            <pattern>
-                {
-                "timestamp": "%d{yyyy-MM-dd'T'HH:mm:ss.SSS}",
-                "service" : "api--order",
-                "level": "%p",
-                "trace": "%X{traceId:-}",
-                "span": "%X{spanId:-}",
-                "class": "%logger{40}",
-                "message": "%msg"
-                }
-            </pattern>
-        </encoder>
-    </appender>
-
-    <root level="debug">
+    <include resource="org/springframework/boot/logging/logback/default.xml"/>
+    <springProfile name="jsonlog">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>
+                    {
+                    "timestamp": "%d{yyyy-MM-dd'T'HH:mm:ss.SSS}",
+                    "service" : "api--order",
+                    "level": "%p",
+                    "trace": "%X{traceId:-}",
+                    "span": "%X{spanId:-}",
+                    "class": "%logger{40}",
+                    "message": "%msg"
+                    }
+                </pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+    <springProfile name="!jsonlog">
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    </springProfile>
+    <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>
