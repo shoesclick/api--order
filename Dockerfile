@@ -14,7 +14,7 @@ ENV JAVA_OPTS "$JAVA_OPTS \
     -Duser.timezone=America/Fortaleza \
     -XX:ActiveProcessorCount=2 \
     -XX:+UseParallelGC \
-    -XX:+MaxRAMPercentage=75"
+    -XX:MaxRAMPercentage=75"
 
 EXPOSE 5000 9190
 
